@@ -1,8 +1,22 @@
-
 spring:
   application:
-    name: xxxxxxxx
+    name: aplicationdb
   datasource:
-    url: jdbc:mysql://localhost:3306/xxxxxx
-    username: xxxxx
-    password: xxxxxx
+    url: jdbc:mysql://localhost:3306/applicationdb
+    username: root
+    password: Msn123@msn
+
+  security:
+    oauth2:
+      client:
+        registration:
+          cognito:
+            clientId: cr75am7mc736ecd9a9ho64qna
+            clientSecret: 1grkppoa9afg328rfu3t8j5bc43c8qe0nec0uvtrblvugn8b98eh
+            scope: openid
+            redirect-uri: http://localhost:8080/login/oauth2/code/cognito
+            clientName: admission-app-client
+        provider:
+          cognito:
+            issuerUri: https://cognito-idp.eu-north-1.amazonaws.com/eu-north-1_7FaOkjPV5
+            user-name-attribute: username
