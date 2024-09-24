@@ -19,7 +19,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(Customizer.withDefaults())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/", "/sign-up","/api/teachers")
+                        .requestMatchers("/", "/sign-up","/api/teachers,/teachers")
                         .permitAll()
                         .anyRequest()
                         .authenticated())

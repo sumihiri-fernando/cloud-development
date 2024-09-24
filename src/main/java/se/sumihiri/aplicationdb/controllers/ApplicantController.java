@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import se.sumihiri.aplicationdb.models.Applicant;
 import se.sumihiri.aplicationdb.service.ApplicantService;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/applicants")
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public class ApplicantController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Applicant> getApplicantById(@PathVariable Long id) {
-        var applicant = applicantService.getApplicantById(id);
+        Optional<Applicant> applicant= applicantService.getApplicantById(id);
         if (applicant.isPresent()) {
             return new ResponseEntity<>(applicant.get(), HttpStatus.OK);
         } else {
