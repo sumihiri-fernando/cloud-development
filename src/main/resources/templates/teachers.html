@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles1.css">
+
+    <title>Teachers</title>
+</head>
+<body>
+<h1>Teachers</h1>
+<header>
+
+    <a href="/">Home</a>
+    <a href="/logout">Logout</a>
+</header>
+<div id="teacherList">
+    <ul>
+        <li th:each="teacher : ${teachers}">
+            <span th:text="${teacher.name}">Teacher Name</span>
+            <button class="editButton" data-id="${teacher.id}">Edit</button>
+            <button class="deleteButton" data-id="${teacher.id}">Delete</button>
+        </li>
+    </ul>
+</div>
+
+<!-- Button to Open Modal -->
+<button id="openModal">Add Teacher</button>
+
+<!-- Modal Structure -->
+<div id="teacherModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add Teacher</h2>
+        <form id="addTeacherForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="subject">Subject:</label>
+            <input type="text" id="subject" name="subject" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <button type="submit">Add Teacher</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Structure for Editing -->
+<div id="editTeacherModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit Teacher</h2>
+        <form id="editTeacherForm">
+            <input type="hidden" id="editTeacherId" name="id" />
+            <label for="editName">Name:</label>
+            <input type="text" id="editName" name="name" required>
+            <label for="editSubject">Subject:</label>
+            <input type="text" id="editSubject" name="subject" required>
+            <label for="editEmail">Email:</label>
+            <input type="email" id="editEmail" name="email" required>
+            <button type="submit">Update Teacher</button>
+        </form>
+    </div>
+</div>
+
+<script src="teachers.js"></script>
+</body>
+</html>

@@ -1,59 +1,66 @@
 package se.sumihiri.aplicationdb.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.sumihiri.aplicationdb.dto.ApplicantDTO;
 import se.sumihiri.aplicationdb.models.Applicant;
 import se.sumihiri.aplicationdb.service.ApplicantService;
-import se.sumihiri.aplicationdb.service.TeacherService;
 
-@Controller
-@RequestMapping("/applicants")
+@RestController
+@RequestMapping("/api/applicants")
+@RequiredArgsConstructor
 public class ApplicantController {
+    private final ApplicantService applicantService;
 
-    @Autowired
-    private ApplicantService applicantService;
 
-    @Autowired
-    private TeacherService teacherService;
-
-    // Display list of applicants
-    @GetMapping
-    public String viewApplicantsPage(Model model) {
-        model.addAttribute("applicants", applicantService.getAllApplicants());
-        return "applicant";  // This will be the applicants list HTML page
-    }
-
-    // Show form to add new applicant
-    @GetMapping("/new")
-    public String showNewApplicantForm(Model model) {
-        model.addAttribute("applicant", new Applicant());
-        model.addAttribute("teachers", teacherService.getAllTeachers());  // To select teacher
-        return "applicant-form";  // This will be the form to add/edit an applicant
-    }
-
-    // Save a new applicant
     @PostMapping
-    public String saveApplicant(@ModelAttribute("applicant") Applicant applicant) {
-        applicantService.createApplicant(applicant);
-        return "redirect:/applicants";
+    ResponseEntity<String> createApplicant(@RequestBody Applicant applicant) {
+        var created = applicantService.createApplicant(applicant);
+
+        if (created) {
+            return new ResponseEntity<>("Applicant has been created successfully.", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>("Failed to create applicant", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // Show form for updating an applicant
-    @GetMapping("/edit/{id}")
-    public String showFormForUpdate(@PathVariable(value = "id") Long id, Model model) {
-        ApplicantDTO applicant = applicantService.getApplicantById(id);
-        model.addAttribute("applicant", applicant);
-        model.addAttribute("teachers", teacherService.getAllTeachers());  // To select teacher
-        return "applicant-form";
+
+    @GetMapping
+    public ResponseEntity<Iterable<Applicant>> getAllApplicants() {
+        Iterable<Applicant> applicants = applicantService.getAllApplicants();
+        return new ResponseEntity<>(applicants, HttpStatus.OK);
     }
 
-    // Delete applicant by ID
-    @GetMapping("/delete/{id}")
-    public String deleteApplicant(@PathVariable(value = "id") Long id) {
-        applicantService.deleteApplicantById(id);
-        return "redirect:/applicants";
+    @GetMapping("/{id}")
+    public ResponseEntity<Applicant> getApplicantById(@PathVariable Long id) {
+        var applicant = applicantService.getApplicantById(id);
+        if (applicant.isPresent()) {
+            return new ResponseEntity<>(applicant.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateApplicant(@PathVariable Long id, @RequestBody Applicant applicant) {
+        var isUpdated = applicantService.updateApplicant(id, applicant);
+        if (isUpdated) {
+            return new ResponseEntity<>("Applicant has been updated", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Failed to update applicant", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteApplicant(@PathVariable Long id) {
+        var isDeleted = applicantService.deleteApplicant(id);
+
+        if (isDeleted) {
+            return new ResponseEntity<>("Applicant has been deleted", HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>("Failed to delete applicant", HttpStatus.NOT_FOUND);
+        }
     }
 }

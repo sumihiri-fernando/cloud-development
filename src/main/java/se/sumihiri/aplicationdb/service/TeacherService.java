@@ -1,80 +1,65 @@
 package se.sumihiri.aplicationdb.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import se.sumihiri.aplicationdb.models.Applicant;
+import se.sumihiri.aplicationdb.dto.TeacherDTO;
 import se.sumihiri.aplicationdb.models.Teacher;
 import se.sumihiri.aplicationdb.repositories.TeacherRepository;
-import se.sumihiri.aplicationdb.dto.TeacherDTO;
-import se.sumihiri.aplicationdb.dto.ApplicantDTO;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class TeacherService {
 
-    @Autowired
-    private TeacherRepository teacherRepository;
+    private final TeacherRepository teacherRepository;
 
-    public List<TeacherDTO> getAllTeachers() {
-        Iterable<Teacher> teachers = teacherRepository.findAll();
-        List<TeacherDTO> teacherDTOs = new ArrayList<>();
-        for (Teacher teacher : teachers) {
-            teacherDTOs.add(convertToDTO(teacher));
+    public boolean createTeacher(TeacherDTO dto) {
+        try {
+            teacherRepository.save(dto.toTeacher()); // Assuming TeacherDTO has a toTeacher() method
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Iterable<TeacherDTO> getAllTeachers() {
+        var teachers = teacherRepository.findAll();
+        var teacherDTOs = new ArrayList<TeacherDTO>();
+
+        for (var teacher : teachers) {
+            var teacherDTO = new TeacherDTO(teacher); // Assuming TeacherDTO has a constructor that takes Teacher
+            teacherDTOs.add(teacherDTO);
         }
         return teacherDTOs;
     }
 
-    public TeacherDTO getTeacherById(Long id) {
-        Teacher teacher = teacherRepository.findById(id).orElse(null);
-        return teacher != null ? convertToDTO(teacher) : null;
+
+    public Optional<Teacher> getTeacherById(Long id) {
+        return teacherRepository.findById(id);
     }
 
-    public TeacherDTO createTeacher(TeacherDTO teacherDTO) {
-        Teacher teacher = convertToEntity(teacherDTO);
-        return convertToDTO(teacherRepository.save(teacher));
-    }
 
-    public TeacherDTO updateTeacher(Long id, TeacherDTO teacherDTO) {
-        Teacher teacher = teacherRepository.findById(id).orElse(null);
-        if (teacher != null) {
-            teacher.setName(teacherDTO.getName());
-            teacher.setSubject(teacherDTO.getSubject());
-            teacher.setEmail(teacherDTO.getEmail());
-            return convertToDTO(teacherRepository.save(teacher));
+    public boolean updateTeacher(Long id, TeacherDTO updatedTeacher) {
+        var existingTeacher = teacherRepository.findById(id);
+
+        if (existingTeacher.isPresent()) {
+            Teacher teacher = existingTeacher.get();
+            teacher.setName(updatedTeacher.getName());
+            teacherRepository.save(teacher);
+            return true;
+        } else {
+            return false;
         }
-        return null;
     }
 
-    public void deleteTeacherById(Long id) {
-        teacherRepository.deleteById(id);
-    }
-
-    // Convert Teacher entity to DTO
-    private TeacherDTO convertToDTO(Teacher teacher) {
-        TeacherDTO teacherDTO = new TeacherDTO();
-        teacherDTO.setId(teacher.getId());
-        teacherDTO.setName(teacher.getName());
-        teacherDTO.setSubject(teacher.getSubject());
-        teacherDTO.setEmail(teacher.getEmail());
-
-        // Convert applicants without using streams
-        List<ApplicantDTO> applicantDTOs = new ArrayList<>();
-        for (Applicant applicant : teacher.getApplicants()) {
-            applicantDTOs.add(new ApplicantDTO(applicant.getId(), applicant.getName(), applicant.getBirthYear(), applicant.getEmail()));
+    public boolean deleteById(Long id) {
+        try {
+            teacherRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-        teacherDTO.setApplicants(applicantDTOs);
-
-        return teacherDTO;
-    }
-
-    // Convert DTO to Teacher entity
-    private Teacher convertToEntity(TeacherDTO teacherDTO) {
-        Teacher teacher = new Teacher();
-        teacher.setName(teacherDTO.getName());
-        teacher.setSubject(teacherDTO.getSubject());
-        teacher.setEmail(teacherDTO.getEmail());
-        return teacher;
     }
 }

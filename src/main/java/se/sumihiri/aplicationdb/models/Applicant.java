@@ -1,27 +1,26 @@
 package se.sumihiri.aplicationdb.models;
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Entity
-@Data
-@AllArgsConstructor
+@Entity(name = "applicants")
+@Getter
+@Setter
 @NoArgsConstructor
-@Table(name = "applicants")
+@AllArgsConstructor
+@ToString
 public class Applicant {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;  // Ensure you have an ID field
 
     private String name;
-    private Integer birthYear;
+
+    @Column(name = "birthYear")  // Explicitly define the column name
+    private int birthYear;
+
     private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "teacher_id", nullable = false)
-    private Teacher teacher;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacher_id")  // Ensure this matches the database column
+    private Teacher selected;
 }
-
-

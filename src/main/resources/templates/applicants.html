@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles1.css">
+    <title>Applicants</title>
+</head>
+<body>
+
+<header>
+
+    <a href="/">Home</a>
+    <a href="/logout">Logout</a>
+</header>
+
+<div id="applicantList">
+    <ul>
+        <li th:each="applicant : ${applicants}">
+            <span th:text="${applicant.name}">Applicant Name</span>
+            <span th:text="${applicant.birthYear}">Birth Year</span>
+            <span th:text="${applicant.email}">Email</span>
+            <button class="editButton" data-id="${applicant.id}">Edit</button>
+            <button class="deleteButton" data-id="${applicant.id}">Delete</button>
+        </li>
+    </ul>
+</div>
+
+<!-- Button to Open Modal -->
+<button id="openModal">Add Applicant</button>
+
+<!-- Modal Structure -->
+<div id="applicantModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add Applicant</h2>
+        <form id="addApplicantForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="birthYear">Birth Year:</label>
+            <input type="number" id="birthYear" name="birthYear" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <button type="submit">Add Applicant</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Structure for Editing -->
+<div id="editApplicantModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit Applicant</h2>
+        <form id="editApplicantForm">
+            <input type="hidden" id="editApplicantId" name="id" />
+            <label for="editName">Name:</label>
+            <input type="text" id="editName" name="name" required>
+            <label for="editBirthYear">Birth Year:</label>
+            <input type="number" id="editBirthYear" name="birthYear" required>
+            <label for="editEmail">Email:</label>
+            <input type="email" id="editEmail" name="email" required>
+            <button type="submit">Update Applicant</button>
+        </form>
+    </div>
+</div>
+
+<script src="applicants.js"></script>
+</body>
+</html>

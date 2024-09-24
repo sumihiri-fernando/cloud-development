@@ -1,53 +1,72 @@
 package se.sumihiri.aplicationdb.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import se.sumihiri.aplicationdb.dto.TeacherDTO;
 import se.sumihiri.aplicationdb.models.Teacher;
 import se.sumihiri.aplicationdb.service.TeacherService;
 
-@Controller
-@RequestMapping("/teachers")
+
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/teachers")
+@RequiredArgsConstructor
 public class TeacherController {
 
     @Autowired
-    private TeacherService teacherService;
+    private final TeacherService teacherService;
 
-    // Display list of teachers
-    @GetMapping
-    public String getAllTeachers(Model model) {
-        model.addAttribute("teachers", teacherService.getAllTeachers());
-        return "teacher";  // This will be the teachers list HTML page
-    }
-
-    // Show form to add new teacher
-    @GetMapping("/new")
-    public String showNewTeacher(Model model) {
-        model.addAttribute("teacher", new Teacher());
-        return "teacher-form";  // This will be the form to add/edit a teacher
-    }
-
-    // Save a new teacher
+    // Create a new Teacher
     @PostMapping
-    public String createTeacher(@ModelAttribute("teacher") TeacherDTO teacher, TeacherDTO teacherDTO) {
-        teacherService.createTeacher(teacherDTO);
-        return "redirect:/teachers";
+    public ResponseEntity<String> createTeacher(@RequestBody TeacherDTO requestBody) {
+        boolean created = teacherService.createTeacher(requestBody);
+
+        if (created) {
+            return new ResponseEntity<>("Teacher created successfully", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>("Failed to create teacher", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // Show form for updating a teacher
-    @GetMapping("/edit/{id}")
-    public String getTeacherById(@PathVariable(value = "id") Long id, Model model) {
-        TeacherDTO teacher = teacherService.getTeacherById(id);
-        model.addAttribute("teacher", teacher);
-        return "teacher-form";
+    // Get all Teachers
+    @GetMapping
+    public ResponseEntity<Iterable<TeacherDTO>> getAllTeachers() {
+        Iterable<TeacherDTO> teachers = teacherService.getAllTeachers();
+        return new ResponseEntity<>(teachers, HttpStatus.OK);
     }
 
-    // Delete teacher by ID
-    @GetMapping("/delete/{id}")
-    public String deleteTeacherById(@PathVariable(value = "id") Long id) {
-        teacherService.deleteTeacherById(id);
-        return "redirect:/teachers";
+    // Get a Teacher by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Teacher> getTeacherById(@PathVariable Long id) {
+        Optional<Teacher> teacher = teacherService.getTeacherById(id);
+        return teacher.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    // Update a Teacher
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateTeacher(@PathVariable Long id, @RequestBody TeacherDTO teacherDTO) {
+        boolean isUpdated = teacherService.updateTeacher(id, teacherDTO);
+        if (isUpdated) {
+            return new ResponseEntity<>("Teacher updated successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Teacher not found or failed to update", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // Delete a Teacher by ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable Long id) {
+        boolean isDeleted = teacherService.deleteById(id);
+
+        if (isDeleted) {
+            return new ResponseEntity<>("Teacher deleted successfully", HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>("Teacher not found or failed to delete", HttpStatus.NOT_FOUND);
+        }
     }
 }
