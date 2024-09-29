@@ -5,9 +5,9 @@ import lombok.NoArgsConstructor;
 
 
 @Data
-@NoArgsConstructor
+
 public class ApplicantDTO {
-    private Long id;
+    private String id;
     private String name;
     private int birthYear;
     private String email;

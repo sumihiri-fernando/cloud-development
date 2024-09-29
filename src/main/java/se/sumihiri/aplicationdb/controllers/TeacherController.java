@@ -2,6 +2,7 @@ package se.sumihiri.aplicationdb.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class TeacherController {
 
     // Get a Teacher by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Teacher> getTeacherById(@PathVariable Long id) {
+    public ResponseEntity<Teacher> getTeacherById(@PathVariable String id) {
         Optional<Teacher> teacher = teacherService.getTeacherById(id);
         return teacher.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -49,7 +50,7 @@ public class TeacherController {
 
     // Update a Teacher
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateTeacher(@PathVariable Long id, @RequestBody TeacherDTO teacherDTO) {
+    public ResponseEntity<String> updateTeacher(@PathVariable String id, @RequestBody TeacherDTO teacherDTO) {
         boolean isUpdated = teacherService.updateTeacher(id, teacherDTO);
         if (isUpdated) {
             return new ResponseEntity<>("Teacher updated successfully", HttpStatus.OK);
@@ -60,7 +61,7 @@ public class TeacherController {
 
     // Delete a Teacher by ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteById(@PathVariable String id) {
         boolean isDeleted = teacherService.deleteById(id);
 
         if (isDeleted) {

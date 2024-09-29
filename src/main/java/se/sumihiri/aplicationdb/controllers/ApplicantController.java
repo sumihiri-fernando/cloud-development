@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import se.sumihiri.aplicationdb.models.Applicant;
 import se.sumihiri.aplicationdb.service.ApplicantService;
 
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/applicants")
@@ -35,8 +35,8 @@ public class ApplicantController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Applicant> getApplicantById(@PathVariable Long id) {
-        Optional<Applicant> applicant= applicantService.getApplicantById(id);
+    public ResponseEntity<Applicant> getApplicantById(@PathVariable String id) {
+        var applicant= applicantService.getApplicantById(id);
         if (applicant.isPresent()) {
             return new ResponseEntity<>(applicant.get(), HttpStatus.OK);
         } else {
@@ -46,7 +46,7 @@ public class ApplicantController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateApplicant(@PathVariable Long id, @RequestBody Applicant applicant) {
+    public ResponseEntity<String> updateApplicant(@PathVariable String id, @RequestBody Applicant applicant) {
         var isUpdated = applicantService.updateApplicant(id, applicant);
         if (isUpdated) {
             return new ResponseEntity<>("Applicant has been updated", HttpStatus.OK);
@@ -56,7 +56,7 @@ public class ApplicantController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteApplicant(@PathVariable Long id) {
+    public ResponseEntity<String> deleteApplicant(@PathVariable String id) {
         var isDeleted = applicantService.deleteApplicant(id);
 
         if (isDeleted) {

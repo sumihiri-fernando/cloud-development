@@ -13,7 +13,7 @@ public class ApplicantService {
 
     private final ApplicantRepository applicantRepository;
 
-    // Create a new Applicant
+
     public boolean createApplicant(Applicant applicant) {
         try {
             applicantRepository.save(applicant);
@@ -28,12 +28,12 @@ public class ApplicantService {
     }
 
 
-    public Optional<Applicant> getApplicantById(Long id) {
+    public Optional<Applicant> getApplicantById(String id) {
         return applicantRepository.findById(id);
     }
 
 
-    public boolean updateApplicant(Long id, Applicant updatedApplicant) {
+    public boolean updateApplicant(String id, Applicant updatedApplicant) {
         Optional<Applicant> existingApplicant = applicantRepository.findById(id);
         if (existingApplicant.isPresent()) {
             Applicant applicant = existingApplicant.get();
@@ -50,7 +50,7 @@ public class ApplicantService {
     }
 
 
-    public boolean deleteApplicant(Long id) {
+    public boolean deleteApplicant(String id) {
         try {
             applicantRepository.deleteById(id);
             return true;

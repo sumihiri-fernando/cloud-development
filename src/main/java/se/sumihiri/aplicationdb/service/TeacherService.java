@@ -36,17 +36,20 @@ public class TeacherService {
     }
 
 
-    public Optional<Teacher> getTeacherById(Long id) {
+    public Optional<Teacher> getTeacherById(String id)
+    {
         return teacherRepository.findById(id);
     }
 
 
-    public boolean updateTeacher(Long id, TeacherDTO updatedTeacher) {
+    public boolean updateTeacher(String id, TeacherDTO updatedTeacher) {
         var existingTeacher = teacherRepository.findById(id);
 
         if (existingTeacher.isPresent()) {
             Teacher teacher = existingTeacher.get();
             teacher.setName(updatedTeacher.getName());
+            teacher.setSubject(updatedTeacher.getSubject());
+            teacher.setEmail(updatedTeacher.getEmail());
             teacherRepository.save(teacher);
             return true;
         } else {
@@ -54,7 +57,7 @@ public class TeacherService {
         }
     }
 
-    public boolean deleteById(Long id) {
+    public boolean deleteById(String id) {
         try {
             teacherRepository.deleteById(id);
             return true;

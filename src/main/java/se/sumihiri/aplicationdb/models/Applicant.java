@@ -2,7 +2,7 @@ package se.sumihiri.aplicationdb.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity(name = "applicants")
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -10,17 +10,17 @@ import lombok.*;
 @ToString
 public class Applicant {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;  // Ensure you have an ID field
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     private String name;
 
-    @Column(name = "birthYear")  // Explicitly define the column name
+    @Column(name = "birthYear")
     private int birthYear;
 
     private String email;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacher_id")  // Ensure this matches the database column
+
     private Teacher selected;
 }

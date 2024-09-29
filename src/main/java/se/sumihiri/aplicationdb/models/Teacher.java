@@ -7,7 +7,7 @@ import lombok.*;
 
 import java.util.List;
 
-@Entity(name = "teachers")
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,8 +15,8 @@ import java.util.List;
 @ToString
 public class Teacher {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
     private String name;
     private String subject;
     private String email;

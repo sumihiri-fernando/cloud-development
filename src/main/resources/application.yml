@@ -6,6 +6,7 @@ spring:
     username: root
     password: Msn123@msn
 
+
   security:
     oauth2:
       client:
@@ -19,4 +20,4 @@ spring:
         provider:
           cognito:
             issuerUri: https://cognito-idp.eu-north-1.amazonaws.com/eu-north-1_7FaOkjPV5
-            user-name-attribute: username
+            user-name-attribute: user123
