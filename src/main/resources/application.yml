@@ -2,9 +2,9 @@ spring:
   application:
     name: aplicationdb
   datasource:
-    url: jdbc:mysql://localhost:3306/applicationdb
-    username: root
-    password: Msn123@msn
+    url: jdbc:mysql://testdb.c12ayq28yya8.eu-north-1.rds.amazonaws.com:3306
+    username: admin
+    password: Admin123
 
 
   security:
@@ -12,12 +12,12 @@ spring:
       client:
         registration:
           cognito:
-            clientId: cr75am7mc736ecd9a9ho64qna
-            clientSecret: 1grkppoa9afg328rfu3t8j5bc43c8qe0nec0uvtrblvugn8b98eh
-            scope: openid
-            redirect-uri: http://localhost:8080/login/oauth2/code/cognito
-            clientName: admission-app-client
+            user-pool-id: eu-north-1_7FaOkjPV5
+            client-id: cr75am7mc736ecd9a9ho64qna
+            region: eu-north-1
+            redirect-uri: http://localhost:8080
+            domain: https://admi-user-pool.auth.eu-north-1.amazoncognito.com
         provider:
           cognito:
-            issuerUri: https://cognito-idp.eu-north-1.amazonaws.com/eu-north-1_7FaOkjPV5
+            issuerUri: arn:aws:cognito-idp:eu-north-1:618550459571:userpool/eu-north-1_7FaOkjPV5
             user-name-attribute: user123
