@@ -65,5 +65,4 @@ If I were to carry out this project again, I would:
 ### Conclusion
 This project was a significant learning experience that improved my skills in web development, security practices, and deployment strategies.
 
-## License
-[Specify the license for your project.]
+
