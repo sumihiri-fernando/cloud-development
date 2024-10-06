@@ -101,37 +101,81 @@ AWS CodePipeline is a fully automated CI/CD service that facilitates continuous 
 We chose AWS CodePipeline because of its ability to automate the entire deployment process, reducing manual intervention and ensuring quicker updates to the application.
 
 #### Deployment Steps
-1. Set up AWS CodePipeline in the AWS console.
-2. Connect your GitHub repository to the pipeline.
-3. Add a build stage using AWS CodeBuild and a deployment stage using AWS Elastic Beanstalk or EC2.
-4. Test the pipeline by pushing code changes to GitHub.
-5. Monitor logs for successful build and deployment.
+1. Build a Spring Boot Application and Upload Code to AWS CodeCommit Repository:
+`git init
+   git add .
+   git commit -m "Initial commit"
+   git remote add origin <repository-URL>
+   git push -u origin master
+   `
+2. Add buildspec.yml and appspec.yml
+3. Create IAM Roles for CodeDeploy, CodeBuild, and EC2
+4. Create an EC2 Instance
+5. Create an Application in CodeDeploy
+- Navigate to AWS CodeDeploy in the AWS Management Console.
+- Click on "Create application" and choose "EC2/On-premises" as the compute platform.
+6. Create a Deployment Group
+- Within your application, click "Create deployment group."
+- Name your group and specify a service role for CodeDeploy.
+- Choose "In-place deployment" and associate the correct EC2 instances.
+7. Create a New Pipeline
+- Set up the source stage pointing to your CodeCommit repository.
+- Configure the build stage using the previously defined `buildspec.yml`.
+- Set up the deploy stage to use CodeDeploy.
+8. Test the Pipeline
+
+#### Video Demonstration
 
 2. EC2 Manual Deployment
+
+#### Deployment Steps
+
+- #### in EC2:
+
+    - sudo yum install java-21-amazon-corretto-devel
+  ![Install java-21-amazon-corretto-devel](Screenshot%202024-10-02%20203615.png)
+	- java --version
+
+  ![Java --version](Screenshot%202024-10-06%20221037.png)
+
+	- sudo yum install mysql
+	
+	- sudo yum install -y mysql-community-client
+  ![Install -y mysql-community-client](Screenshot%202024-09-25%20202407.png)
+	
+	- mysql -u admin -h testdb.c12ayq28yya8.eu-north-1.rds.amazonaws.com -P 3306 -p  
+  ![Mysql -u admin -h](Screenshot%202024-10-06%20222041.png)
+  
+
+- #### in RDS:
+Actions ->"set up EC2 connetion" to allow ec2 to access the db
+
+in Local pc:
+mvn install -> application.jar
+
+in Aws S3:
+
+- Create a S3 bucket
+
+- Upload application jar in to s3 bucket
+
+- Create a presigned Url for the uploaded application.jar file
+  ![S3 bucket](Screenshot%202024-09-25%20203427.png)
+
+in EC2 :
+wget -0 app.jar < Presigned Url of uploaded application jar file in S3>(objecturl)
+
+- java -jar app.jar
+  ![Java -jar app]([aplicationdb-0.0.1-SNAPSHOT.jar.original](target%2Faplicationdb-0.0.1-SNAPSHOT.jar.original)aplication)
+
+- curl -I  http://localhost:8080/
+  ![Curl -I ](Screenshot%202024-10-06%20220905.png)
 
 #### Description
 Amazon EC2 provides scalable virtual servers. With manual deployment, you have full control over the configuration and setup of the environment.
 
 #### Why Chosen
 We selected EC2 manual deployment to offer more control over the environment and demonstrate a hands-on approach to server setup.
-
-#### Deployment Steps
-1. Build a Spring Boot Application and Upload Code to AWS CodeCommit
-2. Add buildspec.yml and appspec.yml
-3. Create IAM Roles for CodeDeploy, CodeBuild, and EC2
-4. Create an EC2 Instance
-5. Create an Application in CodeDeploy
-6. Create a Deployment Group
-7. Create a New Pipeline
-8. Test the Pipeline
-
-#### Video Demonstration
-
-For a demonstration of the application, watch the video below:
-
-[Watch the video](Deployment%20of%20Spring%20Boot%20Application%20Using%20AWS%20CodePipeline.mp4)
-
-
 
 
 ### Comparison of Deployment Methods

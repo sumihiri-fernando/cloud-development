@@ -9,7 +9,7 @@ This Spring Boot web application integrates Spring Security and Amazon Cognito t
 - [Features](#features)
 - [Deployment](#deployment)
 - [Evaluation](#evaluation)
-- [License](#license)
+
 
 ## Getting Started
 [Include instructions on how to set up the project locally, dependencies, and any necessary configurations.]
@@ -21,7 +21,7 @@ This Spring Boot web application integrates Spring Security and Amazon Cognito t
 - Integration with Amazon Cognito for user management
 
 ## Deployment
-[Provide details on how to deploy the application, mentioning both the CodePipeline method and any other methods used.]
+WS CodePipeline automates the build and deployment processes.
 
 ## Evaluation
 
