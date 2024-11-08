@@ -24,7 +24,7 @@ public class SecurityConfiguration {
                         .anyRequest()
                         .authenticated())
                 .oauth2Login(Customizer.withDefaults())
-                .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutSuccessUrl("/"));
+                .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutSuccessUrl("/","/teachers","/api/teachers","/applicants","/api/applicants"));
 
         var logoutSuccessHandler = new CognitoLogoutSuccessHandler(clientRegistrationRepository);
         http.logout(c -> c.logoutSuccessHandler(logoutSuccessHandler));
