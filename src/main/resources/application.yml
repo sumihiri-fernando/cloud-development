@@ -2,9 +2,9 @@ spring:
   application:
     name: aplicationdb
   datasource:
-    url: jdbc:mysql://testdb.c12ayq28yya8.eu-north-1.rds.amazonaws.com:3306
-    username: admin
-    password: Admin123
+    url: jdbc:mysql://xxxxxx.xxxxxxx.eu-north-1.rds.amazonaws.com:3306
+    username: xxxxxx
+    password: xxxxxx
 
 
   security:
@@ -12,12 +12,12 @@ spring:
       client:
         registration:
           cognito:
-            user-pool-id: eu-north-1_7FaOkjPV5
-            client-id: cr75am7mc736ecd9a9ho64qna
+            user-pool-id: xxxxxxx
+            client-id: xxxxxxxxx
             region: eu-north-1
             redirect-uri: http://localhost:8080
             domain: https://admi-user-pool.auth.eu-north-1.amazoncognito.com
         provider:
           cognito:
-            issuerUri: arn:aws:cognito-idp:eu-north-1:618550459571:userpool/eu-north-1_7FaOkjPV5
-            user-name-attribute: user123
+            issuerUri: arn:aws:cognito-idp:eu-north-1:xxxxxxxxxxxxxxxxx/eu-north-1_7FaOkjPV5
+            user-name-attribute: xxxxxxxxxxx
